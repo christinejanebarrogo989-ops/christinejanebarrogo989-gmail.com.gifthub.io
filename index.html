@@ -1,0 +1,992 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Web-Based Parent Portal</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+:root {
+    --navy: #193e6b;
+    --blue: #5b91cc;
+    --light-blue: #dceafa;
+    --background: #f2f5fb;
+    --gray: #64748b;
+}
+
+body {
+    background: var(--background);
+    color: var(--navy);
+}
+
+/* HEADER */
+
+header {
+    background: var(--navy);
+    color: white;
+    padding: 25px 3%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 27px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo span {
+    font-size: 38px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 25px;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+nav a:hover {
+    color: var(--light-blue);
+}
+
+/* PAGE NAVIGATION */
+
+.page, .details-page {
+    display: none;
+}
+
+.page.active, .details-page.active {
+    display: block;
+}
+
+/* HOME PAGE */
+
+.hero {
+    background: var(--navy);
+    color: white;
+    padding: 25px 3% 35px;
+}
+
+.hero h1 {
+    font-size: 42px;
+    margin-bottom: 25px;
+}
+
+.hero p {
+    font-size: 19px;
+    line-height: 1.7;
+    color: var(--light-blue);
+    max-width: 950px;
+}
+
+.hero button {
+    width: 100%;
+    background: var(--blue);
+    color: white;
+    border: none;
+    padding: 20px;
+    border-radius: 30px;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: left;
+    margin-top: 25px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.hero button:hover {
+    background: #78a8dd;
+}
+
+/* CONTAINER */
+
+.container {
+    padding: 40px 3%;
+    background: var(--background);
+}
+
+.section-title {
+    margin-bottom: 35px;
+}
+
+.section-title h2 {
+    font-size: 27px;
+    margin-bottom: 10px;
+}
+
+.section-title p {
+    color: var(--gray);
+    line-height: 1.6;
+}
+
+/* DASHBOARD */
+
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.card {
+    background: white;
+    padding: 30px;
+    min-height: 210px;
+    border-radius: 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 3px 12px #00000008;
+    transition: .3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.icon {
+    font-size: 38px;
+    color: var(--blue);
+}
+
+.card h3 {
+    font-size: 20px;
+    color: #777;
+    margin-bottom: 8px;
+}
+
+.card p {
+    color: var(--gray);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.card button {
+    background: var(--blue);
+    color: white;
+    border: none;
+    padding: 11px 16px;
+    border-radius: 8px;
+    margin-top: 15px;
+    cursor: pointer;
+}
+
+/* LOGIN PAGE */
+
+.login-container {
+    max-width: 430px;
+    margin: 40px auto;
+}
+
+.login-box {
+    background: white;
+    padding: 35px;
+    border-radius: 20px;
+    box-shadow: 0 3px 15px #00000010;
+}
+
+.login-box h2 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.login-box p {
+    text-align: center;
+    color: var(--gray);
+    margin-bottom: 25px;
+    font-size: 14px;
+}
+
+.login-box label {
+    display: block;
+    margin: 15px 0 7px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.login-box input {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #ccd7e5;
+    border-radius: 8px;
+    outline: none;
+}
+
+.login-box input:focus {
+    border-color: var(--blue);
+}
+
+.login-box button {
+    width: 100%;
+    padding: 14px;
+    background: var(--navy);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    margin-top: 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#error {
+    color: #d33;
+    font-size: 13px;
+    margin-top: 12px;
+}
+
+/* DETAILS PAGE */
+
+.details-page {
+    padding: 35px 3%;
+}
+
+.back {
+    background: var(--navy);
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    cursor: pointer;
+}
+
+.panel {
+    background: white;
+    padding: 25px;
+    border-radius: 18px;
+    margin-bottom: 20px;
+    box-shadow: 0 3px 12px #00000008;
+}
+
+.panel h3 {
+    margin-bottom: 20px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.info-item {
+    background: var(--background);
+    padding: 17px;
+    border-radius: 10px;
+}
+
+.info-item small {
+    display: block;
+    color: var(--gray);
+    margin-bottom: 8px;
+}
+
+.record {
+    background: var(--background);
+    padding: 18px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.record p {
+    color: var(--gray);
+    line-height: 1.6;
+    margin-top: 8px;
+}
+
+/* MONITORING REPORT */
+
+.feedback {
+    border-left: 4px solid var(--blue);
+    background: var(--background);
+    padding: 18px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.feedback p {
+    color: var(--gray);
+    line-height: 1.6;
+    margin-top: 8px;
+}
+
+.progress-bg {
+    background: #e3eaf3;
+    height: 12px;
+    border-radius: 20px;
+    margin-top: 12px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    background: var(--blue);
+    height: 100%;
+}
+
+/* END MESSAGE */
+
+.end-message {
+    background: var(--navy);
+    color: white;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.end-message h3 {
+    margin-bottom: 8px;
+}
+
+/* ABOUT AND CONTACT */
+
+.about, .contact {
+    background: white;
+    padding: 30px;
+    border-radius: 18px;
+    margin-top: 25px;
+    line-height: 1.8;
+}
+
+.about p, .contact p {
+    color: var(--gray);
+}
+
+/* FOOTER */
+
+footer {
+    background: var(--navy);
+    color: white;
+    text-align: center;
+    padding: 22px;
+    margin-top: 30px;
+    font-size: 13px;
+}
+
+/* RESPONSIVE DESIGN */
+
+@media(max-width:650px) {
+
+    header {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    nav a {
+        margin: 8px;
+        font-size: 14px;
+    }
+
+    .hero h1 {
+        font-size: 32px;
+    }
+
+    .hero p {
+        font-size: 16px;
+    }
+
+    .dashboard,
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .card {
+        min-height: 180px;
+    }
+
+    .container,
+    .details-page {
+        padding: 25px 5%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<header>
+
+    <div class="logo">
+        <span>🎓</span>
+        Parent Portal
+    </div>
+
+    <nav>
+        <a onclick="showPage('home')">Home</a>
+        <a onclick="goAbout()">About</a>
+        <a onclick="showPage('login')">Login</a>
+    </nav>
+
+</header>
+
+
+<!-- 1. HOME PAGE -->
+
+<section id="home" class="page active">
+
+    <div class="hero">
+
+        <h1>Welcome, Parents!</h1>
+
+        <p>
+            Stay updated with your child's school behavior,
+            participation, and progress through our
+            Web-Based Parent Portal.
+        </p>
+
+        <button onclick="showPage('login')">
+            Explore Parent Portal →
+        </button>
+
+    </div>
+
+    <div class="container">
+
+        <div class="about" id="about">
+
+            <h2>About Our Website</h2>
+
+            <p>
+                The Web-Based Parent Portal is designed to help
+                parents monitor and understand their children's
+                attitude in school. It provides access to student
+                information, behavior and participation records,
+                and monitoring reports.
+            </p>
+
+        </div>
+
+        <div class="contact" id="contact">
+
+            <h2>Contact Us</h2>
+
+            <p>
+                For questions and concerns about the Parent Portal,
+                please contact the school administration.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- 2. PARENT LOGIN -->
+
+<section id="login" class="page">
+
+    <div class="container">
+
+        <div class="login-container">
+
+            <div class="login-box">
+
+                <h2>Parent Login</h2>
+
+                <p>
+                    Enter your username and password
+                    to access the Parent Portal.
+                </p>
+
+                <form onsubmit="login(event)">
+
+                    <label>Username</label>
+
+                    <input
+                        type="text"
+                        id="username"
+                        placeholder="Enter username"
+                        required
+                    >
+
+                    <label>Password</label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter password"
+                        required
+                    >
+
+                    <div id="error"></div>
+
+                    <button type="submit">
+                        LOGIN
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- 3. DASHBOARD -->
+
+<section id="dashboard" class="page">
+
+    <div class="container">
+
+        <div class="section-title">
+
+            <h2>Student Monitoring Dashboard</h2>
+
+            <p>
+                Access your child's student information,
+                attitude records, and monitoring report.
+            </p>
+
+        </div>
+
+        <div class="dashboard">
+
+            <!-- STUDENT INFORMATION -->
+
+            <div class="card">
+
+                <div class="icon">👨‍🎓</div>
+
+                <div>
+                    <h3>Student Information</h3>
+
+                    <p>
+                        View student profile and personal details.
+                    </p>
+
+                    <button onclick="showPage('student')">
+                        View Student Profile →
+                    </button>
+                </div>
+
+            </div>
+
+
+            <!-- STUDENT ATTITUDE -->
+
+            <div class="card">
+
+                <div class="icon">📋</div>
+
+                <div>
+                    <h3>Student Attitude</h3>
+
+                    <p>
+                        View student behavior and classroom participation.
+                    </p>
+
+                    <button onclick="showPage('attitude')">
+                        View Attitude Records →
+                    </button>
+                </div>
+
+            </div>
+
+
+            <!-- MONITORING REPORT -->
+
+            <div class="card">
+
+                <div class="icon">📊</div>
+
+                <div>
+                    <h3>Monitoring Report</h3>
+
+                    <p>
+                        Review teacher feedback and student progress.
+                    </p>
+
+                    <button onclick="showPage('report')">
+                        View Monitoring Report →
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- 4. STUDENT INFORMATION -->
+
+<section id="student" class="details-page">
+
+    <button class="back" onclick="showPage('dashboard')">
+        ← Back to Dashboard
+    </button>
+
+    <div class="section-title">
+
+        <h2>👨‍🎓 Student Information</h2>
+
+        <p>View student profile and personal details.</p>
+
+    </div>
+
+    <div class="panel">
+
+        <h3>Personal Information</h3>
+
+        <div class="info-grid">
+
+            <div class="info-item">
+                <small>Student Name</small>
+                <strong>Juan Dela Cruz</strong>
+            </div>
+
+            <div class="info-item">
+                <small>Student Number</small>
+                <strong>2026-001</strong>
+            </div>
+
+            <div class="info-item">
+                <small>Grade Level</small>
+                <strong>Grade 11</strong>
+            </div>
+
+            <div class="info-item">
+                <small>Section</small>
+                <strong>GAS</strong>
+            </div>
+
+            <div class="info-item">
+                <small>School Year</small>
+                <strong>2026-2027</strong>
+            </div>
+
+            <div class="info-item">
+                <small>Adviser</small>
+                <strong>Teacher Name</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- 5. STUDENT ATTITUDE -->
+
+<section id="attitude" class="details-page">
+
+    <button class="back" onclick="showPage('dashboard')">
+        ← Back to Dashboard
+    </button>
+
+    <div class="section-title">
+
+        <h2>📋 Student Attitude</h2>
+
+        <p>
+            View student behavior and classroom participation.
+        </p>
+
+    </div>
+
+    <div class="panel">
+
+        <h3>Student Attitude Monitoring</h3>
+
+        <div class="record">
+
+            <strong>Classroom Participation</strong>
+
+            <p>
+                The student participates in classroom discussions
+                and school activities.
+            </p>
+
+        </div>
+
+        <div class="record">
+
+            <strong>Behavior</strong>
+
+            <p>
+                The student demonstrates appropriate behavior
+                toward classmates and teachers.
+            </p>
+
+        </div>
+
+        <div class="record">
+
+            <strong>Discipline</strong>
+
+            <p>
+                The student follows classroom rules
+                and school regulations.
+            </p>
+
+        </div>
+
+        <div class="record">
+
+            <strong>Responsibility</strong>
+
+            <p>
+                The student shows responsibility in completing
+                assigned school tasks.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- 6. MONITORING REPORT -->
+
+<section id="report" class="details-page">
+
+    <button class="back" onclick="showPage('dashboard')">
+        ← Back to Dashboard
+    </button>
+
+    <div class="section-title">
+
+        <h2>📊 Monitoring Report</h2>
+
+        <p>
+            Review teacher feedback and student progress.
+        </p>
+
+    </div>
+
+
+    <!-- STUDENT PROGRESS -->
+
+    <div class="panel">
+
+        <h3>Student Progress</h3>
+
+        <div class="record">
+
+            <strong>Classroom Participation</strong>
+
+            <p>
+                Shows participation in classroom activities.
+            </p>
+
+            <div class="progress-bg">
+                <div class="progress-fill" style="width:85%"></div>
+            </div>
+
+        </div>
+
+        <div class="record">
+
+            <strong>Behavior</strong>
+
+            <p>
+                Demonstrates appropriate classroom behavior.
+            </p>
+
+            <div class="progress-bg">
+                <div class="progress-fill" style="width:90%"></div>
+            </div>
+
+        </div>
+
+        <div class="record">
+
+            <strong>Discipline</strong>
+
+            <p>
+                Follows school and classroom rules.
+            </p>
+
+            <div class="progress-bg">
+                <div class="progress-fill" style="width:80%"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- TEACHER FEEDBACK -->
+
+    <div class="panel">
+
+        <h3>Teacher Feedback</h3>
+
+        <div class="feedback">
+
+            <strong>Teacher Observation</strong>
+
+            <p>
+                The student actively participates in classroom
+                discussions and shows interest in school activities.
+            </p>
+
+        </div>
+
+        <div class="feedback">
+
+            <strong>Behavior and Discipline</strong>
+
+            <p>
+                The student demonstrates respect toward teachers
+                and classmates and follows classroom instructions.
+            </p>
+
+        </div>
+
+        <div class="feedback">
+
+            <strong>Teacher Recommendation</strong>
+
+            <p>
+                Continue developing responsibility, positive
+                behavior, and active participation in class.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- END OF PROCESS -->
+
+    <div class="end-message">
+
+        <h3>End of Monitoring Report</h3>
+
+        <p>
+            Student attitude monitoring completed.
+        </p>
+
+    </div>
+
+    <p style="color:#64748b;font-size:12px;margin-top:15px">
+        Note: All student details, progress indicators, and
+        teacher feedback shown are sample data for demonstration.
+    </p>
+
+</section>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    <p>
+        © 2026 Web-Based Parent Portal |
+        Student Attitude Monitoring System
+    </p>
+
+</footer>
+
+
+<!-- JAVASCRIPT -->
+
+<script>
+
+// PAGE NAVIGATION
+
+function showPage(pageId) {
+
+    document.querySelectorAll('.page, .details-page')
+    .forEach(page => {
+        page.classList.remove('active');
+    });
+
+    document.getElementById(pageId).classList.add('active');
+
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+
+}
+
+
+// ABOUT NAVIGATION
+
+function goAbout() {
+
+    showPage('home');
+
+    setTimeout(() => {
+
+        document.getElementById('about').scrollIntoView({
+            behavior: 'smooth'
+        });
+
+    }, 100);
+
+}
+
+
+// PARENT LOGIN
+
+function login(event) {
+
+    event.preventDefault();
+
+    const username =
+        document.getElementById('username').value;
+
+    const password =
+        document.getElementById('password').value;
+
+    const error =
+        document.getElementById('error');
+
+
+    // DEMO LOGIN ONLY
+
+    if (username === "parent" && password === "12345") {
+
+        error.textContent = "";
+
+        document.querySelector('form').reset();
+
+        // LOGIN SUCCESSFUL: OPEN DASHBOARD
+
+        showPage('dashboard');
+
+    } else {
+
+        // LOGIN FAILED: CHECK ACCOUNT DETAILS
+
+        error.textContent =
+            "Login failed. Please check your username and password.";
+
+    }
+
+}
+
+
+// START AT HOMEPAGE
+
+showPage('home');
+
+</script>
+
+</body>
+</html>
